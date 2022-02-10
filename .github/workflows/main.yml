@@ -1,0 +1,31 @@
+name: just example
+on: 
+  pull_request:
+jobs:
+  job1:
+    
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir -p build
+          touch build/1.txt
+          ls build
+      - name: cache 'build' folder
+        id: cache-build
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: build-test
+
+  job2:
+    
+    needs: job1
+    runs-on: macos-latest
+    steps:
+      - name: restore build folder
+        uses: actions/cache@v2
+        with:
+          path: build
+          key: build-test
+
+      - run:  ls build # ls: /data: No such file or directory
